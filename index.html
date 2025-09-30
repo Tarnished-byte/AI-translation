@@ -34,6 +34,17 @@
         #video-feed {
             transform: scaleX(-1); /* Mirror view */
         }
+        .api-key-warning {
+            display: none;
+            padding: 1rem;
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 0.5rem;
+            color: #92400e;
+            text-align: center;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -61,6 +72,11 @@
             <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">Translate Nepali & Sinhalese Documents to English</h2>
             <p class="text-lg text-slate-600 max-w-3xl mx-auto mb-8">Use text, files, or your device's camera to instantly translate printed text into English. Powered by AI.</p>
         </section>
+        
+        <!-- API Key Warning Message -->
+        <div id="api-key-warning" class="api-key-warning max-w-4xl mx-auto">
+            API Key is missing. Please add your Google AI API key to the HTML file to enable translation.
+        </div>
         
         <!-- Translation Tool Section -->
         <section id="solution" class="mt-12">
@@ -174,6 +190,7 @@
         const textInput = document.getElementById('text-input');
         const copyBtn = document.getElementById('copy-btn');
         const copyFeedback = document.getElementById('copy-feedback');
+        const apiKeyWarning = document.getElementById('api-key-warning');
 
         // --- State Management ---
         let currentStream;
@@ -269,11 +286,16 @@
         });
 
         // --- API & Translation Logic ---
-        // IMPORTANT: To make this site work publicly, you need your own API key.
-        // 1. Go to https://aistudio.google.com/app/apikey to create a free API key.
-        // 2. Paste your key below, replacing "YOUR_API_KEY_HERE".
-        // WARNING: Do not share this key publicly or commit it to a public repository.
-        const API_KEY = "AIzaSyDCC0pQqQcxrjX7zEXIXQ7ZLmaaQnCm9jc"; // Keep this empty
+        
+        // ===================================================================================
+        // ============================ PASTE YOUR API KEY HERE ============================
+        //
+        // 1. Get your free API key from Google AI Studio: https://aistudio.google.com/app/apikey
+        // 2. Paste the key between the quotes below.
+        //
+        // ===================================================================================
+        const API_KEY = "AIzaSyDCC0pQqQcxrjX7zEXIXQ7ZLmaaQnCm9jc";
+        
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
         
         async function getApiResponse(prompt, base64Data = null, mimeType = null) {
@@ -312,6 +334,13 @@
         }
 
         translateBtn.addEventListener('click', async () => {
+            // Check for API Key first
+            if (API_KEY === "AIzaSyDCC0pQqQcxrjX7zEXIXQ7ZLmaaQnCm9jc") {
+                apiKeyWarning.style.display = 'block';
+                return;
+            }
+            apiKeyWarning.style.display = 'none';
+
             outputArea.classList.add('placeholder');
             outputArea.innerText = '';
             loader.classList.remove('hidden');
@@ -382,5 +411,4 @@
     </script>
 </body>
 </html>
-
 
