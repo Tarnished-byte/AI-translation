@@ -35,7 +35,7 @@
             100% { transform: rotate(360deg); }
         }
         #video-feed {
-            transform: scaleX(-1); /* Mirror view for user convenience */
+            /* transform: scaleX(-1); --- This line was removed to fix the inverted camera view --- */
         }
         /* Blinking cursor for streaming text */
         .blinking-cursor {
@@ -194,6 +194,23 @@
         // --- State Management ---
         let currentStream;
         let capturedImageData = null;
+        
+        // ===================================================================================
+        // ========================= IMPORTANT SECURITY WARNING ============================
+        //
+        // Exposing an API key in client-side code (like this HTML file) is a major
+        // security risk. Anyone who views the page source can see and steal your key.
+        // This can lead to unauthorized use and potentially large bills from your
+        // API provider.
+        //
+        // For a real-world application, you should ALWAYS hide this key on a server
+        // and have your webpage communicate with your server, not directly with the API.
+        //
+        // This key is being hardcoded here as per your specific request to make the link
+        // shareable and usable by anyone without them needing their own key.
+        // Be aware of the risks involved.
+        //
+        // ===================================================================================
         const API_KEY = 'AIzaSyAu7BGs9cd0jban7heQmHVOjIKYB28SQWk';
 
 
@@ -251,8 +268,7 @@
             canvas.width = videoFeed.videoWidth;
             canvas.height = videoFeed.videoHeight;
             const context = canvas.getContext('2d');
-            context.translate(canvas.width, 0);
-            context.scale(-1, 1);
+            // The two lines that flipped the captured image have been removed.
             context.drawImage(videoFeed, 0, 0, canvas.width, canvas.height);
             
             capturedImageData = canvas.toDataURL('image/jpeg');
@@ -423,4 +439,5 @@
     </script>
 </body>
 </html>
+
 
